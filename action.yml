@@ -1,0 +1,50 @@
+name: 'Get secret from Key Vault'
+description: 'Log into Azure and get secret from Key Vault'
+
+inputs:
+  azure_credentials:
+    description: 'Credentials JSON with subscription id, tenant id, client id and client secret'
+    required: false
+   
+  secret_name:
+    description: 'Name of the secret'
+    required: true
+      
+  key_vault:
+    description: 'Name of the Key Vault'
+    required: true
+    
+  auto_logout:
+    description: 'Automatically log out of Azure session'
+    required: false
+    default: false
+  
+outputs:
+  secret_value:
+    description: "Key Vault's secret value"
+    value: ${{ steps.kv.outputs.secret }}
+    
+runs:
+  using: "composite"
+  steps:
+    - name: Login to Azure
+      if: ${{ inputs.azure_credentials }}
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure_credentials }}
+        enable-AzPSSession: true
+
+    - name: Get secret value
+      id: kv
+      shell: pwsh
+      run: |          
+        $secret = ((az keyvault secret show --name ${{ inputs.secret_name }} --vault-name ${{ inputs.key_vault }} -o json) | ConvertFrom-Json).value
+        echo "secret=$secret" | out-file $env:GITHUB_OUTPUT -append
+
+    - name: Logout of Azure
+      if: ${{ always() && inputs.auto_logout }}
+      shell: bash
+      run: |
+        az logout
+        az cache purge
+        az account clear
