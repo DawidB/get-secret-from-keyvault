@@ -6,18 +6,22 @@ branding:
 
 inputs:
   azure_credentials:
+    type: string
     description: 'Credentials JSON with subscription id, tenant id, client id and client secret'
     required: false
    
   key_vault_name:
+    type: string
     description: 'Name of the Key Vault'
     required: true
     
   secret_name:
+    type: string
     description: 'Name of the secret'
     required: true
       
   auto_logout:
+    type: boolean
     description: 'Automatically log out of Azure session'
     required: false
     default: true
@@ -45,7 +49,7 @@ runs:
         echo "secret=$secret" | out-file $env:GITHUB_OUTPUT -append
 
     - name: Logout of Azure
-      if: ${{ always() && inputs.auto_logout }}
+      if: ${{ always() && inputs.auto_logout == 'true' }}
       shell: bash
       run: |
         az logout
