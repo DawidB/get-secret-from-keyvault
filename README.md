@@ -39,3 +39,7 @@ azure_credentials | Credentials JSON with subscription id, tenant id, client id 
 key_vault_name | The name of the Azure Key Vault from which the secret value will be retrieved. |	Yes
 secret_name	| Secret name. | Yes
 auto_logout | Automatically log out of Azure session | No
+
+# License
+
+This project uses the [MIT license](https://github.com/DawidB/get-secret-from-keyvault/blob/master/LICENSE).
