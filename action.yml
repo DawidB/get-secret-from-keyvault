@@ -17,7 +17,7 @@ inputs:
   auto_logout:
     description: 'Automatically log out of Azure session'
     required: false
-    default: false
+    default: true
   
 outputs:
   secret_value:
