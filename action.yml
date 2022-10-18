@@ -1,5 +1,8 @@
 name: 'Get secret value from Azure Key Vault'
 description: 'Log into Azure and get secret value from the Key Vault'
+branding:
+  icon: unlock
+  color: green
 
 inputs:
   azure_credentials:
